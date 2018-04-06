@@ -14,7 +14,8 @@ dtypes = {
         'click_id'      : 'uint32'
         }
 
-train_df = pd.read_csv(path+"train.csv", nrows=40000000, dtype=dtypes, usecols=['ip','app','device','os', 'channel', 'click_time', 'is_attributed'])
+train_df = pd.read_csv(path+"train.csv", nrows=40000000, dtype=dtypes, usecols=['ip','app','device','os', 'channel', 'click_time', 
+                                                                                'is_attributed'])
 print('load test...')
 test_df = pd.read_csv(path+"test.csv", dtype=dtypes, usecols=['ip','app','device','os', 'channel', 'click_time', 'click_id'])
 
@@ -32,7 +33,8 @@ train_df['day'] = pd.to_datetime(train_df.click_time).dt.day.astype('uint8')
 
 gc.collect()
 
-gp = train_df[['ip','day','hour','channel']].groupby(by=['ip','day','hour'])[['channel']].count().reset_index().rename(index=str, columns={'channel': 'qty'})
+gp = train_df[['ip','day','hour','channel']].groupby(by=['ip','day','hour'])[['channel']].count().reset_index().rename(index=str, 
+                                                                                     columns={'channel': 'qty'})
 
 train_df = train_df.merge(gp, on=['ip','day','hour'], how='left')
 
